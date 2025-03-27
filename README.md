@@ -1,4 +1,4 @@
-# Recognize Anything (Numpy 2.x 지원 버전) (현재 수정 중)
+# Recognize Anything (Numpy 2.x 지원 버전)
 
 > 이 저장소는 [xinyu1205/recognize-anything](https://github.com/xinyu1205/recognize-anything)의 fork 버전입니다.
 
@@ -6,7 +6,6 @@
 >
 > - torch >= 2.6.0
 > - torchvision >= 0.21.0
-> - numpy >= 2.0.0
 
 <details>
 <summary><font size="3" style="font-weight:bold;">NumPy 1.x와 2.x의 주요 코드 수정 사항</font></summary>
