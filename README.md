@@ -1,4 +1,4 @@
-# Recognize Anything (Numpy 2.x 지원 버전)
+# Recognize Anything (Numpy 2.x 지원 버전) (현재 수정 중)
 
 > 이 저장소는 [xinyu1205/recognize-anything](https://github.com/xinyu1205/recognize-anything)의 fork 버전입니다.
 
