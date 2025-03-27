@@ -31,7 +31,7 @@ return torch.from_numpy(w.astype(np.float32))
 
 ### 3. 의존성 관리
 
-- requirements.txt에 numpy==2.0.0 명시
+- requirements.txt에 numpy>=2.0.0 명시
 - setup.py에 의존성 패키지 명시
 
 ### 4. torchvision transforms
