@@ -4,8 +4,8 @@
 
 > ## NumPy 2.x 지원을 위한 최소 버전 요구사항
 >
-> - torch >= 2.6.0
-> - torchvision >= 0.21.0
+> - torch >= 2.3.0
+> - torchvision >= 0.18.0
 
 <details>
 <summary><font size="3" style="font-weight:bold;">NumPy 1.x와 2.x의 주요 코드 수정 사항</font></summary>
