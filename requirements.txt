@@ -2,8 +2,8 @@ timm==0.4.12
 transformers>=4.25.1
 fairscale==0.4.4
 pycocoevalcap
-torch>=2.0.0
-torchvision>=0.15.0
+torch>=2.6.0
+torchvision>=0.21.0
 Pillow
 scipy
 numpy>=2.0.0
