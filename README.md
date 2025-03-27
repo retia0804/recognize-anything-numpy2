@@ -318,13 +318,13 @@ conda activate recognize-anything
 2. Install `recognize-anything` as a package:
 
 ```bash
-pip install git+https://github.com/xinyu1205/recognize-anything.git
+pip install git+https://github.com/retia0804/recognize-anything-numpy2.git
 ```
 
 3. Or, for development, you may build from source:
 
 ```bash
-git clone https://github.com/xinyu1205/recognize-anything.git
+git clone https://github.com/retia0804/recognize-anything-numpy2.git
 cd recognize-anything
 pip install -e .
 ```
