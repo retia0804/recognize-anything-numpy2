@@ -1,3 +1,54 @@
+# Recognize Anything (Numpy 2.x 지원 버전)
+
+> 이 저장소는 [xinyu1205/recognize-anything](https://github.com/xinyu1205/recognize-anything)의 fork 버전입니다.
+
+<details>
+<summary><font size="3" style="font-weight:bold;">NumPy 1.x와 2.x의 주요 코드 수정 사항</font></summary>
+
+### 1. PyTorch 텐서 변환
+
+- NumPy 2.x: `.numpy()` 호출 전에 `.detach()`를 명시적으로 호출해야 함
+
+```python
+# 수정 전
+tag = parse_tag.cpu().numpy()
+
+# 수정 후
+tag = parse_tag.cpu().detach().numpy()
+```
+
+### 2. 데이터 타입 명시
+
+- NumPy 2.x: 배열 생성 시 데이터 타입을 명시적으로 지정해야 함
+
+```python
+# 수정 전
+return torch.from_numpy(w)
+
+# 수정 후
+return torch.from_numpy(w.astype(np.float32))
+```
+
+### 3. 의존성 관리
+
+- requirements.txt에 numpy==2.0.0 명시
+- setup.py에 의존성 패키지 명시
+
+### 4. torchvision transforms
+
+- transforms import 방식 변경
+
+```python
+# 수정 전
+from torchvision.transforms import Normalize, Compose, Resize, ToTensor
+
+# 수정 후
+import torchvision.transforms as T
+from torchvision.transforms.functional import normalize
+```
+
+</details>
+
 # <font size=8> :label: Recognize Anything Model </font>
 
 This project aims to develop a series of open-source and strong fundamental image recognition models.
@@ -8,7 +59,6 @@ This project aims to develop a series of open-source and strong fundamental imag
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mhd-medfa/recognize-anything/blob/main/recognize_anything_demo.ipynb)
 [![Open in Bohrium](https://cdn.dp.tech/bohrium/web/static/images/open-in-bohrium.svg)](https://bohrium.dp.tech/notebooks/63116114759)
 
-
 - **Recognize Anything Plus Model (RAM++)** [[Paper](https://arxiv.org/abs/2310.15200)] <br>
 
   RAM++ is the next generation of RAM, which can **recognize any category with high accuracy**, including **both predefined common categories and diverse open-set categories**.
@@ -16,23 +66,20 @@ This project aims to develop a series of open-source and strong fundamental imag
 - **Recognize Anything Model (RAM)** [[Paper](https://arxiv.org/abs/2306.03514)][[Demo](https://huggingface.co/spaces/xinyu1205/recognize-anything)] <br>
 
   RAM is an image tagging model, which can **recognize any common category with high accuracy**.
-  
+
   RAM is accepted at **CVPR 2024 Multimodal Foundation Models Workshop**.
 
-- **Tag2Text (ICLR 2024)**  [[Paper](https://arxiv.org/abs/2303.05657)] [[Demo](https://huggingface.co/spaces/xinyu1205/recognize-anything)]<br>
+- **Tag2Text (ICLR 2024)** [[Paper](https://arxiv.org/abs/2303.05657)] [[Demo](https://huggingface.co/spaces/xinyu1205/recognize-anything)]<br>
 
   Tag2Text is a vision-language model guided by tagging, which can **support tagging and comprehensive captioning simultaneously**.
-  
+
   Tag2Text is accepted at **ICLR 2024!** See you in Vienna!
-
-
-
 
 ## :bulb: Highlight
 
-### **Superior Image Recognition Capability** 
+### **Superior Image Recognition Capability**
 
-RAM++ outperforms existing SOTA image fundamental recognition models on common tag categories, uncommon tag categories, and  human-object interaction phrases.
+RAM++ outperforms existing SOTA image fundamental recognition models on common tag categories, uncommon tag categories, and human-object interaction phrases.
 
 <p align="center">
  <table class="tg">
@@ -43,24 +90,20 @@ RAM++ outperforms existing SOTA image fundamental recognition models on common t
    <p align="center">Comparison of zero-shot image recognition performance.</p>
 </p>
 
-
-### **Strong Visual Semantic Analysis** 
-
+### **Strong Visual Semantic Analysis**
 
 We have combined Tag2Text and RAM with localization models (Grounding-DINO and SAM) and developed a strong visual semantic analysis pipeline in the [Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) project.
 
 ![](./images/ram_grounded_sam.jpg)
-
 
 ## :sunrise: Model Zoo
 
 <details>
 <summary><font size="3" style="font-weight:bold;">
 RAM++
-</font></summary> 
+</font></summary>
 
 RAM++ is the next generation of RAM, which can recognize any category with high accuracy, including both predefined common categories and diverse open-set categories.
-
 
 - **For Common Predefined Categoies.** RAM++ exhibits exceptional image tagging capabilities with powerful zero-shot generalization, which maintains the same capabilities as RAM.
     <!-- - RAM++ showcases impressive zero-shot performance, significantly outperforming CLIP and BLIP.
@@ -69,7 +112,6 @@ RAM++ is the next generation of RAM, which can recognize any category with high 
 - **For Diverse Open-set Categoires.** RAM++ achieves notably enhancements beyond CLIP and RAM.
     <!-- - RAM++ integrate the image-tags-text triplets within a unified alignment framework.
     - RAM++ pioneer the intergation of LLM's knowledge into image tagging training. -->
-
 
 <p align="center">
  <table class="tg">
@@ -80,7 +122,6 @@ RAM++ is the next generation of RAM, which can recognize any category with high 
   <p align="center">(Green color means fully supervised learning and others means zero-shot performance.)</p>
 </p>
 
-
 <p align="center">
  <table class="tg">
   <tr>
@@ -90,25 +131,21 @@ RAM++ is the next generation of RAM, which can recognize any category with high 
   <p align="center">RAM++ demonstrate a significant improvement in open-set category recognition.</p>
 </p>
 
-
 </details>
-
-
 
 <details>
 <summary><font size="3" style="font-weight:bold;">
 RAM
 </font></summary>
 
-
 RAM is a strong image tagging model, which can recognize any common category with high accuracy.
+
 - **Strong and general.** RAM exhibits exceptional image tagging capabilities with powerful zero-shot generalization;
-    - RAM showcases impressive zero-shot performance, significantly outperforming CLIP and BLIP.
-    - RAM even surpasses the fully supervised manners (ML-Decoder).
-    - RAM exhibits competitive performance with the Google tagging API.
+  - RAM showcases impressive zero-shot performance, significantly outperforming CLIP and BLIP.
+  - RAM even surpasses the fully supervised manners (ML-Decoder).
+  - RAM exhibits competitive performance with the Google tagging API.
 - **Reproducible and affordable.** RAM requires Low reproduction cost with open-source and annotation-free dataset;
 - **Flexible and versatile.** RAM offers remarkable flexibility, catering to various application scenarios.
-
 
 <p align="center">
  <table class="tg">
@@ -128,26 +165,23 @@ RAM is a strong image tagging model, which can recognize any common category wit
 </p>
 
 RAM significantly improves the tagging ability based on the Tag2text framework.
-- **Accuracy.** RAM utilizes a **data engine** to **generate** additional annotations and **clean** incorrect ones,  **higher accuracy** compared to Tag2Text.
-- **Scope.** RAM upgrades the number of fixed tags from  3,400+ to **[6,400+](./ram/data/ram_tag_list.txt)** (synonymous reduction to 4,500+ different semantic tags), covering **more valuable categories**.
+
+- **Accuracy.** RAM utilizes a **data engine** to **generate** additional annotations and **clean** incorrect ones, **higher accuracy** compared to Tag2Text.
+- **Scope.** RAM upgrades the number of fixed tags from 3,400+ to **[6,400+](./ram/data/ram_tag_list.txt)** (synonymous reduction to 4,500+ different semantic tags), covering **more valuable categories**.
   Moreover, RAM is equipped with **open-set capability**, feasible to recognize tags not seen during training
 
-
 </details>
-
-
 
 <details>
 <summary><font size="3" style="font-weight:bold;">
 Tag2text
 </font></summary>
 
-
 Tag2Text is an efficient and controllable vision-language model with tagging guidance.
-- **Tagging.** Tag2Text recognizes **[3,400+](./ram/data/tag2text_ori_tag_list.txt)** commonly human-used categories without manual annotations.
-- **Captioning.** Tag2Text integrates **tags information** into text generation as the **guiding elements**, resulting in **more controllable and comprehensive descriptions**. 
-- **Retrieval.** Tag2Text provides **tags** as **additional visible alignment indicators** for image-text retrieval. 
 
+- **Tagging.** Tag2Text recognizes **[3,400+](./ram/data/tag2text_ori_tag_list.txt)** commonly human-used categories without manual annotations.
+- **Captioning.** Tag2Text integrates **tags information** into text generation as the **guiding elements**, resulting in **more controllable and comprehensive descriptions**.
+- **Retrieval.** Tag2Text provides **tags** as **additional visible alignment indicators** for image-text retrieval.
 
 <p align="center">
  <table class="tg">
@@ -167,7 +201,6 @@ Tag2Text is an efficient and controllable vision-language model with tagging gui
     <p align="center">Tag2Text provides tags as additional visible alignment indicators.</p>
 </p>
 
-
 </details>
 
 <!-- ## :sparkles: Highlight Projects with other Models
@@ -175,8 +208,7 @@ Tag2Text is an efficient and controllable vision-language model with tagging gui
 - [Ask-Anything](https://github.com/OpenGVLab/Ask-Anything) is a multifunctional video question answering tool. Tag2Text provides powerful tagging and captioning capabilities as a fundamental component.
 - [Prompt-can-anything](https://github.com/positive666/Prompt-Can-Anything) is a gradio web library that integrates SOTA multimodal large models, including Tag2text as the core model for graphic understanding -->
 
-
-<!-- 
+<!--
 ## :fire: News
 
 - **`2023/10/30`**: We release the [Recognize Anything Model Plus Model(RAM++)](), checkpoints and inference code!
@@ -188,11 +220,8 @@ Tag2Text is an efficient and controllable vision-language model with tagging gui
 - **`2023/04/10`**: Code and checkpoint is available Now!
 - **`2023/03/14`**: [Tag2Text web demo 🤗](https://huggingface.co/spaces/xinyu1205/Recognize_Anything-Tag2Text) is available on Hugging Face Space!   -->
 
-
-
-
-<!-- 
-## :writing_hand: TODO 
+<!--
+## :writing_hand: TODO
 
 - [x] Release checkpoints.
 - [x] Release inference code.
@@ -201,35 +230,35 @@ Tag2Text is an efficient and controllable vision-language model with tagging gui
 - [x] Release training datasets.
 - [ ] Release full training codes and scripts. -->
 
-
 ## :open_book: Training Datasets
 
-### **Image Texts and Tags** 
+### **Image Texts and Tags**
 
 These annotation files come from the [Tag2Text](https://arxiv.org/abs/2303.05657) and [RAM](https://recognize-anything.github.io/). Tag2Text automatically extracts image tags from image-text pairs. RAM further augments both tags and texts via an automatic data engine.
 
-
-| DataSet  | Size    | Images | Texts | Tags  |
-|----------|---------|--------|-------|-------|
-| [COCO](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/coco_train_rmcocodev_ram.json)     | 168 MB  | 113K   | 680K  | 3.2M  |
-| [VG](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/vg_ram.json)       | 55 MB   | 100K   | 923K  | 2.7M  |
-| [SBU](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/sbu_ram.json)      | 234 MB  | 849K   | 1.7M  | 7.6M  |
-| [CC3M](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/cc3m_train_ram.json)     | 766 MB  | 2.8M   | 5.6M  | 28.2M |
-| [CC3M-val](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/cc3m_val_ram.json) | 3.5 MB  | 12K    | 26K   | 132K  |
+| DataSet                                                                                                              | Size   | Images | Texts | Tags  |
+| -------------------------------------------------------------------------------------------------------------------- | ------ | ------ | ----- | ----- |
+| [COCO](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/coco_train_rmcocodev_ram.json) | 168 MB | 113K   | 680K  | 3.2M  |
+| [VG](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/vg_ram.json)                     | 55 MB  | 100K   | 923K  | 2.7M  |
+| [SBU](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/sbu_ram.json)                   | 234 MB | 849K   | 1.7M  | 7.6M  |
+| [CC3M](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/cc3m_train_ram.json)           | 766 MB | 2.8M   | 5.6M  | 28.2M |
+| [CC3M-val](https://huggingface.co/datasets/xinyu1205/recognize-anything-dataset/blob/main/cc3m_val_ram.json)         | 3.5 MB | 12K    | 26K   | 132K  |
 
 CC12M to be released in the next update.
 
-### **LLM Tag Descriptions** 
+### **LLM Tag Descriptions**
 
 These tag descriptions files come from the [RAM++](https://arxiv.org/abs/2310.15200) by calling GPT api. You can also customize any tag categories by [generate_tag_des_llm.py](generate_tag_des_llm.py).
 
-| Tag Descriptions    | Tag List |
-|---------------------|----------|
-| [RAM Tag List](https://huggingface.co/datasets/xinyu1205/recognize-anything-plus-model-tag-descriptions/blob/main/ram_tag_list_4585_llm_tag_descriptions.json)        | [4,585](ram/data/ram_tag_list.txt)    |
-| [OpenImages Uncommon](./datasets/openimages_rare_200/openimages_rare_200_llm_tag_descriptions.json) | [200](datasets/openimages_rare_200/openimages_rare_200_ram_taglist.txt)      |
+| Tag Descriptions                                                                                                                                               | Tag List                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [RAM Tag List](https://huggingface.co/datasets/xinyu1205/recognize-anything-plus-model-tag-descriptions/blob/main/ram_tag_list_4585_llm_tag_descriptions.json) | [4,585](ram/data/ram_tag_list.txt)                                      |
+| [OpenImages Uncommon](./datasets/openimages_rare_200/openimages_rare_200_llm_tag_descriptions.json)                                                            | [200](datasets/openimages_rare_200/openimages_rare_200_ram_taglist.txt) |
 
 ## :toolbox: Checkpoints
+
 Note : you need to create 'pretrained' folder and download these checkpoints into this folder.
+
 <!-- insert a table -->
 <table>
   <thead>
@@ -270,10 +299,9 @@ Note : you need to create 'pretrained' folder and download these checkpoints int
   </tbody>
 </table>
 
-
 ## :running: Model Inference
 
-### **Setting Up** ###
+### **Setting Up**
 
 1. Create and activate a Conda environment:
 
@@ -302,14 +330,13 @@ Then the RAM++, RAM, and Tag2Text models can be imported in other projects:
 from ram.models import ram_plus, ram, tag2text
 ```
 
-### **RAM++ Inference** ###
+### **RAM++ Inference**
 
 Get the English and Chinese outputs of the images:
 
 ```bash
 python inference_ram_plus.py --image images/demo/demo1.jpg --pretrained pretrained/ram_plus_swin_large_14m.pth
 ```
-
 
 The output will look like the following:
 
@@ -318,7 +345,7 @@ Image Tags:  armchair | blanket | lamp | carpet | couch | dog | gray | green | h
 图像标签:  扶手椅  | 毯子/覆盖层 | 灯  | 地毯  | 沙发 | 狗 | 灰色 | 绿色  | 坐垫/搁脚凳/草丛 | 家/住宅 | 躺  | 客厅  | 相框  | 枕头  | 植物  | 房间  | 壁灯  | 坐/放置/坐落 | 木地板
 ```
 
-### **RAM++ Inference on Unseen Categories (Open-Set)** ##
+### **RAM++ Inference on Unseen Categories (Open-Set)**
 
 1. Get the [OpenImages-Uncommon categories](./datasets/openimages_rare_200/openimages_rare_200_ram_taglist.txt) of the image:
 
@@ -331,6 +358,7 @@ python inference_ram_plus_openset.py  --image images/openset_example.jpg \
 </pre>
 
 The output will look like the following:
+
 ```
 Image Tags: Close-up | Compact car | Go-kart | Horse racing | Sport utility vehicle | Touring car
 ```
@@ -361,17 +389,15 @@ The output will look like the following:
 
 ```
 Image Tags:  armchair | blanket | lamp | carpet | couch | dog | floor | furniture | gray | green | living room | picture frame | pillow | plant | room | sit | stool | wood floor
-图像标签:  扶手椅  | 毯子/覆盖层 | 灯  | 地毯  | 沙发 | 狗 | 地板/地面 | 家具  | 灰色 | 绿色  | 客厅  | 相框  | 枕头  | 植物  | 房间  | 坐/放置/坐落 | 凳子  | 木地板 
+图像标签:  扶手椅  | 毯子/覆盖层 | 灯  | 地毯  | 沙发 | 狗 | 地板/地面 | 家具  | 灰色 | 绿色  | 客厅  | 相框  | 枕头  | 植物  | 房间  | 坐/放置/坐落 | 凳子  | 木地板
 ```
 
 </details>
-
 
 <details>
 <summary><font size="4" style="font-weight:bold;">
 RAM Inference on Unseen Categories (Open-Set)
 </font></summary>
-
 
 Firstly, custom recognition categories in [build_openset_label_embedding](./ram/utils/openset_utils.py), then get the tags of the images:
 
@@ -381,10 +407,10 @@ python inference_ram_openset.py  --image images/openset_example.jpg \
 </pre>
 
 The output will look like the following:
+
 ```
 Image Tags: Black-and-white | Go-kart
 ```
-
 
 </details>
 
@@ -393,8 +419,8 @@ Image Tags: Black-and-white | Go-kart
 Tag2Text Inference
 </font></summary>
 
-
 Get the tagging and captioning results:
+
 <pre/>
 python inference_tag2text.py  --image images/demo/demo1.jpg \
 --pretrained pretrained/tag2text_swin_14m.pth
@@ -406,7 +432,8 @@ Or get the tagging and sepcifed captioning results (optional):
 
 </details>
 
-### **Batch Inference and Evaluation** ##
+### **Batch Inference and Evaluation**
+
 We release two datasets `OpenImages-common` (214 common tag classes) and `OpenImages-rare` (200 uncommon tag classes). Copy or sym-link test images of [OpenImages v6](https://storage.googleapis.com/openimages/web/download_v6.html) to `datasets/openimages_common_214/imgs/` and `datasets/openimages_rare_200/imgs`.
 
 To evaluate RAM++ on `OpenImages-common`:
@@ -465,10 +492,9 @@ Please refer to `batch_inference.py` for more options. To get P/R in table 3 of 
 
 To batch inference custom images, you can set up you own datasets following the given two datasets.
 
-
 ## :golfing: Model Training/Finetuning
 
-### **RAM++** ##
+### **RAM++**
 
 1. Download [RAM training datasets](#open_book-training-datasets) where each json file contains a list. Each item in the list is a dictonary with three key-value pairs: {'image_path': path_of_image, 'caption': text_of_image, 'union_label_id': image tags for tagging which including parsed tags and pseudo tags }.
 
@@ -496,7 +522,6 @@ python -m torch.distributed.run --nproc_per_node=8 finetune.py \
   --checkpoint outputs/ram_plus/checkpoint_04.pth \
   --output-dir outputs/ram_plus_ft
 ```
-
 
 <details>
 <summary><font size="4" style="font-weight:bold;">
@@ -532,7 +557,6 @@ python -m torch.distributed.run --nproc_per_node=8 finetune.py \
 
 </details>
 
-
 <details>
 <summary><font size="4" style="font-weight:bold;">
 Tag2Text 
@@ -565,8 +589,8 @@ python -m torch.distributed.run --nproc_per_node=8 finetune.py \
 
 </details>
 
-
 ## :black_nib: Citation
+
 If you find our work to be useful for your research, please consider citing.
 
 ```
@@ -594,8 +618,9 @@ If you find our work to be useful for your research, please consider citing.
 ```
 
 ## :hearts: Acknowledgements
+
 This work is done with the help of the amazing code base of [BLIP](https://github.com/salesforce/BLIP), thanks very much!
 
 We want to thank @Cheng Rui @Shilong Liu @Ren Tianhe for their help in [marrying RAM/Tag2Text with Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything).
 
-We also want to thank [Ask-Anything](https://github.com/OpenGVLab/Ask-Anything), [Prompt-can-anything](https://github.com/positive666/Prompt-Can-Anything) for  combining RAM/Tag2Text, which greatly expands the application boundaries of RAM/Tag2Text.
+We also want to thank [Ask-Anything](https://github.com/OpenGVLab/Ask-Anything), [Prompt-can-anything](https://github.com/positive666/Prompt-Can-Anything) for combining RAM/Tag2Text, which greatly expands the application boundaries of RAM/Tag2Text.

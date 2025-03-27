@@ -190,7 +190,7 @@ class Tag2Text(nn.Module):
         loss_tag = self.tagging_loss_function(logits, tag)
 
         ##================= Image-Tag-Text Generation ================##
-        tag = tag.cpu().numpy()
+        tag = tag.cpu().detach().numpy()
         tag_input = []
         for b in range(bs):
             index = np.argwhere(tag[b] == 1)
@@ -278,7 +278,7 @@ class Tag2Text(nn.Module):
                 torch.tensor(1.0).to(image.device),
                 torch.zeros(self.num_class).to(image.device))
 
-            tag = targets.cpu().numpy()
+            tag = targets.cpu().detach().numpy()
 
             # delete some tags that may disturb captioning
             tag[:, self.delete_tag_index] = 0

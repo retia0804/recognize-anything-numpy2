@@ -324,7 +324,7 @@ class RAM_plus(nn.Module):
             torch.tensor(1.0).to(image.device),
             torch.zeros(self.num_class).to(image.device))
 
-        tag = targets.cpu().numpy()
+        tag = targets.cpu().detach().numpy()
         tag[:,self.delete_tag_index] = 0
         tag_output = []
         tag_output_chinese = []
@@ -387,7 +387,7 @@ class RAM_plus(nn.Module):
             torch.tensor(1.0).to(image.device),
             torch.zeros(self.num_class).to(image.device))
 
-        tag = targets.cpu().numpy()
+        tag = targets.cpu().detach().numpy()
         tag[:,self.delete_tag_index] = 0
         tag_output = []
         for b in range(bs):

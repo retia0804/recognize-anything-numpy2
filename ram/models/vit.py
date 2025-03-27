@@ -12,6 +12,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
+import numpy as np
 
 from timm.models.vision_transformer import _cfg, PatchEmbed
 from timm.models.registry import register_model
@@ -202,8 +203,6 @@ class VisionTransformer(nn.Module):
 def _load_weights(model: VisionTransformer, checkpoint_path: str, prefix: str = ''):
     """ Load weights from .npz checkpoints for official Google Brain Flax implementation
     """
-    import numpy as np
-
     def _n2p(w, t=True):
         if w.ndim == 4 and w.shape[0] == w.shape[1] == w.shape[2] == 1:
             w = w.flatten()
@@ -214,7 +213,7 @@ def _load_weights(model: VisionTransformer, checkpoint_path: str, prefix: str = 
                 w = w.transpose([2, 0, 1])
             elif w.ndim == 2:
                 w = w.transpose([1, 0])
-        return torch.from_numpy(w)
+        return torch.from_numpy(w.astype(np.float32))
 
     w = np.load(checkpoint_path)
     if not prefix and 'opt/target/embedding/kernel' in w:
